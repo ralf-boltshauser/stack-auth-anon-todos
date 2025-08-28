@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stack Auth Anonymous Todos
 
-## Getting Started
+A Next.js todo application that demonstrates the power of **anonymous user authentication** using [Stack Auth](https://stack-auth.com/). This project showcases how to create a superior customer journey by allowing users to experience your application before being hit with a login screen.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Anonymous User Experience**: Users can create, manage, and persist todos without any authentication barriers
+- **Seamless Onboarding**: No sign-up required to start using the app immediately
+- **Persistent Data**: Anonymous users' todos are saved and persist across sessions
+- **Full-Stack**: Next.js 15 with App Router, Prisma ORM, and PostgreSQL
+
+## ✨ The Anonymous User Advantage
+
+This project demonstrates a superior approach to user onboarding:
+
+### Before (Traditional Approach)
+1. User visits app
+2. Immediately sees login/signup screen
+3. User must create account before experiencing value
+4. High friction leads to user abandonment
+
+### After (Anonymous-First Approach)
+1. User visits app (anonymous user is created)
+2. Can immediately start using app
+3. Data persists automatically
+4. User experiences value before any commitment
+5. Optional upgrade to authenticated account later
+
+## 🔑 How Anonymous Users Work
+
+### Frontend Implementation
+
+The app uses Stack Auth's `useUser` hook with the `or: "anonymous"` option:
+
+```tsx
+const user = useUser({ or: "anonymous" });
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This ensures that even unauthenticated users get a unique, persistent identifier.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend Implementation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Server actions automatically handle anonymous users:
 
-## Learn More
+```tsx
+const user = await stackServerApp.getUser({ or: "anonymous" });
+```
 
-To learn more about Next.js, take a look at the following resources:
+All database operations are tied to the user ID, whether anonymous or authenticated.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Data Persistence
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Anonymous users get a unique, persistent ID
+- Todos are automatically associated with their user ID
+- Data persists across browser sessions
+- No data loss when users eventually authenticate
 
-## Deploy on Vercel
+## 🎯 Benefits of This Approach
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### For Users
+- **Zero Friction**: Start using the app immediately
+- **No Commitment**: Try before you buy
+- **Seamless Experience**: No interruptions or barriers
+- **Data Safety**: Todos are preserved and associated with your session
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### For Developers
+- **Higher Conversion**: Users experience value before authentication
+- **Better UX**: Smoother onboarding flow
+- **Flexible Migration**: Easy to convert anonymous users to authenticated accounts
+
+## 🔧 Development
+
+### Project Structure
+
+```
+src/
+├── app/
+│   ├── page.tsx              # Landing page with anonymous user support
+│   ├── todos/
+│   │   ├── page.tsx          # Todos page
+│   │   ├── actions.ts        # Server actions with anonymous user handling
+│   │   ├── todos-list.tsx    # Todo list component
+│   │   └── todo-item.tsx     # Individual todo item
+│   └── layout.tsx
+├── components/ui/             # Reusable UI components
+├── lib/                       # Database and utility functions
+└── generated/                 # Prisma generated types
+```
+
+### Key Files
+
+- **`src/app/page.tsx`**: Landing page demonstrating anonymous user setup
+- **`src/app/todos/actions.ts`**: Server actions showing anonymous user handling
+- **`src/stack.tsx`**: Stack Auth configuration
+- **`prisma/schema.prisma`**: Database schema with user association
+
+## 🙏 Acknowledgments
+
+- [Stack Auth](https://stack-auth.com/) for anonymous user support and personal help along the way
+- [Next.js](https://nextjs.org/) for the amazing framework
+- [Prisma](https://prisma.io/) for the excellent ORM
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
